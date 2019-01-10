@@ -38,29 +38,31 @@ public class StackedLayout extends LinearLayout {
 
         //remove view/hide tile @ top of stack
         if (!empty()) {
-            removeView(peek());
+            removeView(tiles.peek());
         }
 
         //push specified tile to tiles stack
         tiles.push(tile);
 
         //call addview with the tile that was just pushed
-        addView(peek());
+        addView(tiles.peek());
 
     }
 
     public View pop() {
-        //View popped = null;
+        View popped = null;
 
-        //pop a tile
-        View popped = tiles.pop();
-
-        if (popped != null) {
+        if (!empty()) {
+            //pop a tile
+            popped = tiles.pop();
             //call remove view on popped tile
             removeView(popped);
 
-            //addview with tile on top of stack
-            addView(peek());
+            if (!empty()) {
+                //addview with tile on top of stack
+                addView(tiles.peek());
+            }
+
         }
 
         //returns popped tile

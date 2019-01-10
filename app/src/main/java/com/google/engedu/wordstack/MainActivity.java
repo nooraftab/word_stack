@@ -38,13 +38,18 @@ import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int WORD_LENGTH = 5;
+    private int WORD_LENGTH = 3;
     public static final int LIGHT_BLUE = Color.rgb(176, 200, 255);
     public static final int LIGHT_GREEN = Color.rgb(200, 255, 200);
     private ArrayList<String> words = new ArrayList<>();
     private Random random = new Random();
     private StackedLayout stackedLayout;
     private String word1, word2;
+
+    private Stack<LetterTile> placedTiles = new Stack<>();
+
+    private ViewGroup word1LinearLayout;
+    private ViewGroup word2LinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +83,11 @@ public class MainActivity extends AppCompatActivity {
         stackedLayout = new StackedLayout(this);
         verticalLayout.addView(stackedLayout, 3);
 
-        View word1LinearLayout = findViewById(R.id.word1);
-        word1LinearLayout.setOnTouchListener(new TouchListener());
-        //word1LinearLayout.setOnDragListener(new DragListener());
-        View word2LinearLayout = findViewById(R.id.word2);
-        word2LinearLayout.setOnTouchListener(new TouchListener());
-        //word2LinearLayout.setOnDragListener(new DragListener());
+        word1LinearLayout = findViewById(R.id.word1);
+        word1LinearLayout.setOnDragListener(new DragListener());
+
+        word2LinearLayout = findViewById(R.id.word2);
+        word2LinearLayout.setOnDragListener(new DragListener());
     }
 
     private class TouchListener implements View.OnTouchListener {
@@ -102,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
                  **  YOUR CODE GOES HERE
                  **
                  **/
+
+                placedTiles.push(tile);     //tile or this?
+
                 return true;
             }
             return false;
@@ -137,11 +144,15 @@ public class MainActivity extends AppCompatActivity {
                         TextView messageBox = (TextView) findViewById(R.id.message_box);
                         messageBox.setText(word1 + " " + word2);
                     }
+
                     /**
                      **
                      **  YOUR CODE GOES HERE
                      **
                      **/
+
+                    placedTiles.push(tile);
+
                     return true;
             }
             return false;
@@ -162,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
         int rand2 = random.nextInt(words.size());
 
         //randomly gets two words
-        String word1 = words.get(rand1);
-        String word2 = words.get(rand2);
+        word1 = words.get(rand1);
+        word2 = words.get(rand2);
 
         //trying to scramble words below!
 
@@ -199,20 +210,25 @@ public class MainActivity extends AppCompatActivity {
         }
         else if (word2Count < WORD_LENGTH) {
 
-            String word2Substring = word2.substring(word1Count, word2.length());
-            scrambledWordIGuess.append( word2Substring);
+            String word2Substring = word2.substring(word2Count, word2.length());
+            scrambledWordIGuess.append(word2Substring);
 
         }
 
         messageBox.setText(scrambledWordIGuess);
 
-//        Log.i("ALEXIS", "this is " + word1 + " and " + word2);
-//        Log.i("ALEXIS", scrambledWordIGuess+ "");
+        Log.i("ALEXIS", "this is " + word1 + " and " + word2);
+        Log.i("ALEXIS", scrambledWordIGuess+ "");
 
         for(int i = scrambledWordIGuess.length()-1; i >= 0; i--) {
             stackedLayout.push(new LetterTile(this, scrambledWordIGuess.charAt(i)));
         }
 
+        word1LinearLayout.removeAllViews();
+        word2LinearLayout.removeAllViews();
+        stackedLayout.clear();
+
+        WORD_LENGTH++;
 
         return true;
     }
@@ -223,6 +239,18 @@ public class MainActivity extends AppCompatActivity {
          **  YOUR CODE GOES HERE
          **
          **/
-        return true;
+
+        if (!placedTiles.empty()) {
+
+            //pops most recent tile on stack
+            LetterTile tile = placedTiles.pop();
+
+            //moves the tile to the stackedlayout (at the bottom of white rectangles)
+            // so letter can be chosen again
+            tile.moveToViewGroup(stackedLayout);
+            return true;
+        }
+
+        return false;
     }
 }

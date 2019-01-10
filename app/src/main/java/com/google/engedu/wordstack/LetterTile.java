@@ -73,6 +73,12 @@ public class LetterTile extends android.support.v7.widget.AppCompatTextView {
          **  YOUR CODE GOES HERE
          **
          **/
+
+        if(!frozen && motionEvent.getAction() == motionEvent.ACTION_DOWN) {
+            startDrag(ClipData.newPlainText("", ""), new View.DragShadowBuilder(this), this, 0);
+            return true;
+        }
+
         return super.onTouchEvent(motionEvent);
     }
 }
