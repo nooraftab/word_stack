@@ -206,8 +206,13 @@ public class MainActivity extends AppCompatActivity {
 
         messageBox.setText(scrambledWordIGuess);
 
-        Log.i("ALEXIS", "this is " + word1 + " and " + word2);
-        Log.i("ALEXIS", scrambledWordIGuess+ "");
+//        Log.i("ALEXIS", "this is " + word1 + " and " + word2);
+//        Log.i("ALEXIS", scrambledWordIGuess+ "");
+
+        for(int i = scrambledWordIGuess.length()-1; i >= 0; i--) {
+            stackedLayout.push(new LetterTile(this, scrambledWordIGuess.charAt(i)));
+        }
+
 
         return true;
     }
