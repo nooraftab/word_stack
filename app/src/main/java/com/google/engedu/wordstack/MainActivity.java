@@ -24,6 +24,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +39,7 @@ import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int WORD_LENGTH = 3;
+    private static final int WORD_LENGTH = 5;
     public static final int LIGHT_BLUE = Color.rgb(176, 200, 255);
     public static final int LIGHT_GREEN = Color.rgb(200, 255, 200);
     private ArrayList<String> words = new ArrayList<>();
@@ -228,8 +229,6 @@ public class MainActivity extends AppCompatActivity {
         word2LinearLayout.removeAllViews();
         stackedLayout.clear();
 
-        WORD_LENGTH++;
-
         return true;
     }
 
@@ -248,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
             //moves the tile to the stackedlayout (at the bottom of white rectangles)
             // so letter can be chosen again
             tile.moveToViewGroup(stackedLayout);
+
             return true;
         }
 
